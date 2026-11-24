@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101714">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MY BALANCE">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>MY BALANCE</title>
+<style>
+:root{--bg:#0e1412;--panel:#151e1a;--panel2:#1b2721;--text:#edf5ef;--muted:#8fa197;--line:#29372f;--accent:#39d98a;--accent2:#1b9d63;--red:#ff6b70;--yellow:#f5c86b;--shadow:0 12px 32px #0004}
+:root.light{--bg:#f2f6f3;--panel:#fff;--panel2:#eaf1ec;--text:#17231c;--muted:#68796f;--line:#dce6df;--accent:#138b55;--accent2:#087a49;--red:#d94a55;--yellow:#a77818;--shadow:0 10px 25px #20382a12}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding-bottom:88px}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{max-width:780px;margin:auto;padding:env(safe-area-inset-top) 16px 18px}
+header{display:flex;align-items:center;justify-content:space-between;padding:17px 2px 18px}
+.brand{font-weight:850;letter-spacing:1.8px;font-size:17px}.brand span{color:var(--accent)}
+.sub{font-size:11px;color:var(--muted);letter-spacing:1.4px;margin-top:4px}
+.iconbtn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:13px;padding:10px 12px}
+h1{font-size:23px;margin:12px 0 16px}h2{font-size:17px;margin:0 0 13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:17px;box-shadow:var(--shadow);margin-bottom:13px}
+.hero{background:linear-gradient(135deg,#14271e,#102019 65%,#18382a);border:1px solid #28533b}
+.light .hero{background:linear-gradient(135deg,#e1f6e9,#f7fff9 70%,#d5f1df);color:#183323}
+.eyebrow{color:var(--muted);font-size:12px}.hero .eyebrow{color:inherit;opacity:.7}
+.balance{font-size:34px;font-weight:800;letter-spacing:-1.1px;margin:8px 0 17px;overflow-wrap:anywhere}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#ffffff0c;border:1px solid #ffffff12;border-radius:14px;padding:12px}
+.light .stat{background:#ffffffa6;border-color:#d5e8da}
+.stat small{display:block;opacity:.7;margin-bottom:7px}.stat strong{font-size:16px}
+.positive{color:var(--accent)}.negative{color:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.mini{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:14px;min-width:0}
+.mini .num{font-size:20px;font-weight:750;margin-top:8px;overflow-wrap:anywhere}.mini small{color:var(--muted)}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:21px 2px 11px}
+.linkbtn{border:0;background:none;color:var(--accent);font-weight:650;padding:5px}
+.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.action{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:15px;padding:13px 6px;font-size:13px;font-weight:650}
+.action b{display:block;font-size:21px;margin-bottom:5px;color:var(--accent)}
+.rowitem{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
+.rowitem:last-child{border:0}.bubble{width:39px;height:39px;display:grid;place-items:center;background:var(--panel2);border-radius:13px;font-size:18px;flex:none}
+.itemmain{flex:1;min-width:0}.itemmain strong{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.itemmain small{color:var(--muted);font-size:12px}
+.amount{font-weight:750;white-space:nowrap}.muted{color:var(--muted)}
+nav{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--bg) 91%,transparent);backdrop-filter:blur(18px);border-top:1px solid var(--line);padding:8px 5px calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;z-index:5}
+.navinner{width:min(780px,100%);display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.navbtn{border:0;background:none;color:var(--muted);padding:7px 2px;border-radius:12px;font-size:10px}.navbtn span{display:block;font-size:19px;margin-bottom:3px}.navbtn.active{color:var(--accent);background:var(--panel2);font-weight:750}
+.page{display:none}.page.active{display:block}
+.primary{background:var(--accent);color:#062113;border:0;border-radius:13px;padding:12px 16px;font-weight:800}
+.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:13px;padding:11px 14px;font-weight:650}
+.danger{color:var(--red);background:transparent;border:1px solid var(--line);border-radius:11px;padding:7px 10px}
+.field{display:grid;gap:6px;margin:12px 0}.field label{font-size:12px;color:var(--muted)}.field input,.field select{width:100%;padding:12px 13px;border-radius:12px;background:var(--bg);color:var(--text);border:1px solid var(--line);outline:none}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.formgrid .field{margin:5px 0}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.toolbar input,.toolbar select{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:11px;padding:10px;min-width:0}
+.pill{display:inline-block;background:var(--panel2);color:var(--muted);border-radius:30px;padding:5px 9px;font-size:11px}
+.progress{height:8px;background:var(--panel2);border-radius:99px;overflow:hidden;margin:10px 0 6px}.progress i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.empty{text-align:center;padding:25px 10px;color:var(--muted)}.empty b{display:block;color:var(--text);margin-bottom:6px}
+.modal{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;justify-content:center;z-index:10;padding:12px}.modal.show{display:flex}
+.sheet{width:min(600px,100%);max-height:90dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:19px;box-shadow:var(--shadow)}
+.sheethead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.toast{position:fixed;top:calc(10px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);background:var(--accent);color:#062113;padding:11px 16px;border-radius:30px;font-weight:750;z-index:20;display:none;max-width:90%;text-align:center}
+.notice{padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel2);font-size:12px;color:var(--muted);line-height:1.5}
+.chartbars{display:flex;align-items:end;gap:8px;height:135px;padding:10px 0 0}.barwrap{flex:1;text-align:center;min-width:0}.bar{background:var(--accent2);border-radius:7px 7px 2px 2px;min-height:3px}.barlabel{font-size:10px;color:var(--muted);margin-top:7px}
+@media(min-width:650px){.app{padding-left:24px;padding-right:24px}.balance{font-size:40px}.modal{align-items:center}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><div class="brand">MY <span>BALANCE</span></div><div class="sub">PERSONAL FINANCE</div></div><button class="iconbtn" id="themeBtn" aria-label="Сменить тему">☼</button></header>
+
+<section id="home" class="page active">
+<h1>Главная</h1>
+<div class="card hero">
+<div class="eyebrow" id="balanceLabel">Баланс счетов · RUB</div><div class="balance" id="totalBalance">0 ₽</div>
+<div class="stats"><div class="stat"><small>Доходы за месяц</small><strong class="positive" id="monthIncome">+0 ₽</strong></div><div class="stat"><small>Расходы за месяц</small><strong class="negative" id="monthExpense">−0 ₽</strong></div></div>
+</div>
+<div class="grid2">
+<div class="mini"><small>Счета</small><div class="num" id="accountsCount">0</div></div>
+<div class="mini"><small>Финансовые цели</small><div class="num" id="goalsCount">0</div></div>
+</div>
+<div class="sectionhead"><h2>Быстрое действие</h2></div>
+<div class="actions"><button class="action" onclick="openTx('expense')"><b>−</b>Расход</button><button class="action" onclick="openTx('income')"><b>＋</b>Доход</button><button class="action" onclick="openTx('transfer')"><b>⇄</b>Перевод</button></div>
+<div class="sectionhead"><h2>Последние операции</h2><button class="linkbtn" onclick="showPage('operations')">Все</button></div>
+<div class="card" id="recentList"></div>
+<div class="sectionhead"><h2>Мои счета</h2><button class="linkbtn" onclick="showPage('accounts')">Все счета</button></div>
+<div class="card" id="homeAccounts"></div>
+</section>
+
+<section id="operations" class="page">
+<h1>Операции</h1><div class="toolbar"><input id="searchTx" placeholder="Поиск операции" oninput="renderTransactions()"><select id="filterType" onchange="renderTransactions()"><option value="all">Все типы</option><option value="income">Доходы</option><option value="expense">Расходы</option><option value="transfer">Переводы</option></select></div>
+<button class="primary" onclick="openTx()">＋ Добавить операцию</button><div class="card" style="margin-top:13px" id="txList"></div>
+</section>
+
+<section id="accounts" class="page">
+<h1>Счета</h1><button class="primary" onclick="openAccount()">＋ Добавить счёт</button><div id="accountList" style="margin-top:13px"></div>
+<div class="notice">Баланс счёта рассчитывается из начального остатка и операций. Переводы между своими счетами не считаются доходом или расходом.</div>
+</section>
+
+<section id="budget" class="page">
+<h1>Бюджет</h1><div class="card"><div class="eyebrow">Расходы за текущий месяц</div><div class="balance" style="font-size:29px" id="budgetSpent">0 ₽</div><div class="muted" id="budgetCaption">Установи месячный лимит</div><div class="progress"><i id="budgetProgress" style="width:0%"></i></div></div>
+<div class="card"><h2>Месячный лимит</h2><div class="field"><label>Лимит расходов, RUB</label><input id="budgetLimit" type="number" min="0" step="1" placeholder="Например, 50000"></div><button class="primary" onclick="saveBudget()">Сохранить лимит</button></div>
+<div class="card"><h2>Расходы по категориям</h2><div id="categoryBudget"></div></div>
+</section>
+
+<section id="analytics" class="page">
+<h1>Аналитика</h1><div class="grid2"><div class="mini"><small>Доходы за месяц</small><div class="num positive" id="anIncome">0 ₽</div></div><div class="mini"><small>Расходы за месяц</small><div class="num negative" id="anExpense">0 ₽</div></div></div>
+<div class="card" style="margin-top:13px"><h2>Расходы по категориям</h2><div id="categoryChart"></div></div>
+<div class="card"><h2>Итог месяца</h2><div id="analyticsSummary" class="muted"></div></div>
+</section>
+
+<section id="settings" class="page">
+<h1>Настройки</h1>
+<div class="card"><h2>Оформление</h2><div class="toolbar"><button class="secondary" onclick="setTheme('dark')">Тёмная тема</button><button class="secondary" onclick="setTheme('light')">Светлая тема</button></div><div class="field"><label>Основная валюта</label><select id="currency" onchange="saveCurrency()"><option value="RUB">RUB · ₽</option><option value="EUR">EUR · €</option><option value="USD">USD · $</option><option value="GBP">GBP · £</option><option value="KZT">KZT · ₸</option></select></div></div>
+<div class="card"><h2>Резервная копия</h2><p class="muted">Экспортируй свои данные в файл и храни его отдельно. Импорт заменит текущие данные.</p><div class="toolbar"><button class="primary" onclick="exportData()">Экспортировать данные</button><button class="secondary" onclick="document.getElementById('importFile').click()">Восстановить</button><input id="importFile" type="file" accept="application/json" hidden onchange="importData(event)"></div></div>
+<div class="card"><h2>Хранение данных</h2><div class="notice">Итоговый баланс и месячные итоги включают только счета в выбранной основной валюте. Счета в других валютах показываются отдельно: автоматическая конвертация появится в будущей версии. Данные этой версии хранятся локально в браузере на этом устройстве. Очистка данных сайта или удаление браузера может удалить их. Регулярно создавай резервные копии. Облачной синхронизации пока нет.</div><p id="offlineState" class="muted">Проверка режима подключения…</p></div>
+<div class="card"><h2>О приложении</h2><div class="brand">MY <span>BALANCE</span></div><p class="muted">Локальная тестовая веб-версия · MVP 0.1</p><button class="danger" onclick="resetData()">Удалить все данные</button></div>
+</section>
+</div>
+
+<nav><div class="navinner">
+<button class="navbtn active" data-page="home" onclick="showPage('home')"><span>⌂</span>Главная</button>
+<button class="navbtn" data-page="operations" onclick="showPage('operations')"><span>↕</span>Операции</button>
+<button class="navbtn" data-page="budget" onclick="showPage('budget')"><span>◷</span>Бюджет</button>
+<button class="navbtn" data-page="analytics" onclick="showPage('analytics')"><span>▥</span>Аналитика</button>
+<button class="navbtn" data-page="settings" onclick="showPage('settings')"><span>⚙</span>Настройки</button>
+</div></nav>
+
+<div class="modal" id="txModal"><div class="sheet"><div class="sheethead"><h2 id="txTitle">Новая операция</h2><button class="iconbtn" onclick="closeModal('txModal')">✕</button></div>
+<form id="txForm" onsubmit="saveTx(event)">
+<div class="formgrid"><div class="field"><label>Тип</label><select id="txType" onchange="txTypeChanged()"><option value="expense">Расход</option><option value="income">Доход</option><option value="transfer">Перевод</option></select></div><div class="field"><label>Сумма</label><input id="txAmount" type="number" min="0.01" step="0.01" required placeholder="0.00"></div></div>
+<div class="field"><label>Описание</label><input id="txTitleInput" maxlength="70" required placeholder="Например, Продукты"></div>
+<div class="formgrid"><div class="field" id="categoryField"><label>Категория</label><select id="txCategory"></select></div><div class="field"><label>Дата</label><input id="txDate" type="date" required></div></div>
+<div class="field"><label>Счёт</label><select id="txAccount" required></select></div>
+<div class="field" id="toAccountField" style="display:none"><label>На счёт</label><select id="txToAccount"></select></div>
+<div class="field"><label>Комментарий (необязательно)</label><input id="txNote" maxlength="160" placeholder="Заметка"></div>
+<button class="primary" style="width:100%;margin-top:8px" type="submit">Сохранить операцию</button>
+</form></div></div>
+
+<div class="modal" id="accountModal"><div class="sheet"><div class="sheethead"><h2>Новый счёт</h2><button class="iconbtn" onclick="closeModal('accountModal')">✕</button></div>
+<form onsubmit="saveAccount(event)"><div class="field"><label>Название</label><input id="accName" required maxlength="40" placeholder="Например, Основная карта"></div>
+<div class="formgrid"><div class="field"><label>Тип</label><select id="accType"><option>Банковская карта</option><option>Наличные</option><option>Накопительный счёт</option><option>Электронный кошелёк</option><option>Другой</option></select></div><div class="field"><label>Валюта</label><select id="accCurrency"><option>RUB</option><option>EUR</option><option>USD</option><option>GBP</option><option>KZT</option></select></div></div>
+<div class="field"><label>Начальный баланс</label><input id="accBalance" type="number" step="0.01" value="0"></div><button class="primary" style="width:100%">Создать счёт</button></form></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const CATEGORIES=['Продукты','Кафе и рестораны','Транспорт','Автомобиль','Жильё','Коммунальные услуги','Здоровье','Одежда и обувь','Развлечения','Связь и подписки','Образование','Путешествия','Подарки','Финансы','Зарплата','Прочее'];
+const ICONS={'Продукты':'🛒','Кафе и рестораны':'☕','Транспорт':'🚕','Автомобиль':'🚗','Жильё':'🏠','Коммунальные услуги':'💡','Здоровье':'＋','Одежда и обувь':'👕','Развлечения':'🎮','Связь и подписки':'📱','Образование':'📚','Путешествия':'✈️','Подарки':'🎁','Финансы':'💳','Зарплата':'💼','Прочее':'•'};
+const KEY='my_balance_data_v1';
+let data=loadData(), editingId=null;
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function loadData(){try{return JSON.parse(localStorage.getItem(KEY))||{accounts:[],transactions:[],goals:[],budget:0,currency:'RUB',theme:'dark'}}catch(e){return {accounts:[],transactions:[],goals:[],budget:0,currency:'RUB',theme:'dark'}}}
+function persist(){localStorage.setItem(KEY,JSON.stringify(data));renderAll()}
+function money(n,c=data.currency){let sym={RUB:'₽',EUR:'€',USD:'$',GBP:'£',KZT:'₸'}[c]||c;return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(n||0)+' '+sym}
+function dateNow(){return new Date().toISOString().slice(0,10)}
+function monthKey(d=dateNow()){return d.slice(0,7)}
+function accountBalance(a){return Number(a.initial||0)+data.transactions.reduce((s,t)=>{if(t.type==='income'&&t.accountId===a.id)s+=Number(t.amount);if(t.type==='expense'&&t.accountId===a.id)s-=Number(t.amount);if(t.type==='transfer'){if(t.accountId===a.id)s-=Number(t.amount);if(t.toAccountId===a.id)s+=Number(t.amount)}return s},0)}
+function totalBalance(){return data.accounts.filter(a=>a.currency===data.currency).reduce((s,a)=>s+accountBalance(a),0)}
+function monthTx(type){return data.transactions.filter(t=>t.date.startsWith(monthKey())&&t.type===type&&((data.accounts.find(a=>a.id===t.accountId)||{}).currency||data.currency)===data.currency)}
+function fmtDate(d){try{return new Date(d+'T00:00:00').toLocaleDateString('ru-RU',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return d}}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===p));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.page===p));renderAll();window.scrollTo(0,0)}
+function toast(s){let el=document.getElementById('toast');el.textContent=s;el.style.display='block';setTimeout(()=>el.style.display='none',2200)}
+function closeModal(id){document.getElementById(id).classList.remove('show')}
+function openTx(type='expense'){if(!data.accounts.length){toast('Сначала добавь счёт');showPage('accounts');openAccount();return}editingId=null;document.getElementById('txForm').reset();document.getElementById('txType').value=type;document.getElementById('txDate').value=dateNow();document.getElementById('txTitle').textContent='Новая операция';fillAccountSelects();fillCategories();txTypeChanged();document.getElementById('txModal').classList.add('show')}
+function fillCategories(){document.getElementById('txCategory').innerHTML=CATEGORIES.map(c=>`<option>${c}</option>`).join('')}
+function fillAccountSelects(){let opts=data.accounts.map(a=>`<option value="${a.id}">${esc(a.name)} · ${a.currency}</option>`).join('');document.getElementById('txAccount').innerHTML=opts;document.getElementById('txToAccount').innerHTML=opts}
+function txTypeChanged(){let tr=document.getElementById('txType').value==='transfer';document.getElementById('toAccountField').style.display=tr?'block':'none';document.getElementById('categoryField').style.display=tr?'none':'block';document.getElementById('txTitleInput').placeholder=tr?'Например, Перевод между счетами':'Например, Продукты'}
+function saveTx(e){e.preventDefault();let type=document.getElementById('txType').value,amount=Number(document.getElementById('txAmount').value),accountId=document.getElementById('txAccount').value,toAccountId=document.getElementById('txToAccount').value;if(!(amount>0)){toast('Проверь сумму');return}if(type==='transfer'&&(!toAccountId||toAccountId===accountId)){toast('Выбери разные счета');return}
+data.transactions.unshift({id:uid(),type,amount,title:document.getElementById('txTitleInput').value.trim(),category:type==='transfer'?'Перевод':document.getElementById('txCategory').value,date:document.getElementById('txDate').value,accountId,toAccountId:type==='transfer'?toAccountId:null,note:document.getElementById('txNote').value.trim()});persist();closeModal('txModal');toast('Операция сохранена')}
+function openAccount(){document.getElementById('accountModal').classList.add('show')}
+function saveAccount(e){e.preventDefault();data.accounts.push({id:uid(),name:document.getElementById('accName').value.trim(),type:document.getElementById('accType').value,currency:document.getElementById('accCurrency').value,initial:Number(document.getElementById('accBalance').value)||0});persist();closeModal('accountModal');e.target.reset();toast('Счёт создан')}
+function deleteTx(id){if(!confirm('Удалить эту операцию?'))return;data.transactions=data.transactions.filter(t=>t.id!==id);persist();toast('Операция удалена')}
+function deleteAccount(id){if(data.transactions.some(t=>t.accountId===id||t.toAccountId===id)){toast('Нельзя удалить счёт с операциями');return}if(!confirm('Удалить счёт?'))return;data.accounts=data.accounts.filter(a=>a.id!==id);persist()}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function txHTML(t){let sign=t.type==='income'?'+':t.type==='expense'?'−':'⇄',cls=t.type==='income'?'positive':t.type==='expense'?'negative':'muted',account=data.accounts.find(a=>a.id===t.accountId);let label=t.type==='transfer'?'Перевод':t.category;let curr=account?.currency||data.currency;return `<div class="rowitem"><div class="bubble">${t.type==='income'?'↗':t.type==='expense'?(ICONS[t.category]||'•'):'⇄'}</div><div class="itemmain"><strong>${esc(t.title)}</strong><small>${esc(label)} · ${fmtDate(t.date)}${account?' · '+esc(account.name):''}</small></div><div class="amount ${cls}">${sign} ${money(t.amount,curr)}</div><button class="danger" aria-label="Удалить" onclick="deleteTx('${t.id}')">×</button></div>`}
+function renderTransactions(){let q=(document.getElementById('searchTx')?.value||'').toLowerCase(),f=document.getElementById('filterType')?.value||'all';let arr=data.transactions.filter(t=>(f==='all'||t.type===f)&&(`${t.title} ${t.category} ${t.note||''}`).toLowerCase().includes(q));document.getElementById('txList').innerHTML=arr.length?arr.map(txHTML).join(''):'<div class="empty"><b>Операций пока нет</b>Добавь первую операцию, чтобы начать учёт.</div>'}
+function renderAccounts(){let html=data.accounts.map(a=>`<div class="card"><div class="rowitem" style="border:0;padding:0"><div class="bubble">💳</div><div class="itemmain"><strong>${esc(a.name)}</strong><small>${esc(a.type)} · ${a.currency}</small></div><div class="amount">${money(accountBalance(a),a.currency)}</div></div><div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="danger" onclick="deleteAccount('${a.id}')">Удалить</button></div></div>`).join('');document.getElementById('accountList').innerHTML=html||'<div class="card empty"><b>Счетов пока нет</b>Добавь карту, наличные или накопительный счёт.</div>';document.getElementById('homeAccounts').innerHTML=data.accounts.length?data.accounts.slice(0,3).map(a=>`<div class="rowitem"><div class="bubble">💳</div><div class="itemmain"><strong>${esc(a.name)}</strong><small>${a.currency}</small></div><div class="amount">${money(accountBalance(a),a.currency)}</div></div>`).join(''):'<div class="empty">Добавь первый счёт в разделе «Счета».</div>'}
+function renderCategories(){let ex=monthTx('expense'),map={};ex.forEach(t=>map[t.category]=(map[t.category]||0)+t.amount);let rows=Object.entries(map).sort((a,b)=>b[1]-a[1]);let total=ex.reduce((s,t)=>s+t.amount,0);let html=rows.map(([c,v])=>`<div style="margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px"><span>${ICONS[c]||'•'} ${esc(c)}</span><b>${money(v)}</b></div><div class="progress"><i style="width:${total?v/total*100:0}%"></i></div></div>`).join('');document.getElementById('categoryBudget').innerHTML=html||'<div class="empty">Пока нет расходов за этот месяц.</div>';document.getElementById('categoryChart').innerHTML=html||'<div class="empty">Добавь расходы, чтобы увидеть аналитику.</div>'}
+function renderAll(){document.documentElement.classList.toggle('light',data.theme==='light');document.getElementById('currency').value=data.currency||'RUB';document.getElementById('balanceLabel').textContent='Баланс счетов · '+(data.currency||'RUB');let mi=monthTx('income').reduce((s,t)=>s+t.amount,0),me=monthTx('expense').reduce((s,t)=>s+t.amount,0);document.getElementById('totalBalance').textContent=money(totalBalance());document.getElementById('monthIncome').textContent='+'+money(mi);document.getElementById('monthExpense').textContent='−'+money(me);document.getElementById('accountsCount').textContent=data.accounts.length;document.getElementById('goalsCount').textContent=data.goals.length;document.getElementById('recentList').innerHTML=data.transactions.length?data.transactions.slice(0,5).map(txHTML).join(''):'<div class="empty"><b>Добро пожаловать в MY BALANCE</b>Создай первый счёт и добавь операцию.</div>';renderAccounts();renderTransactions();document.getElementById('budgetLimit').value=data.budget||'';document.getElementById('budgetSpent').textContent=money(me);let pct=data.budget?Math.min(100,me/data.budget*100):0;document.getElementById('budgetProgress').style.width=pct+'%';document.getElementById('budgetCaption').textContent=data.budget?`Из ${money(data.budget)} использовано ${pct.toFixed(0)}%`:'Установи месячный лимит';document.getElementById('anIncome').textContent=money(mi);document.getElementById('anExpense').textContent=money(me);document.getElementById('analyticsSummary').textContent=`За текущий месяц: доходы ${money(mi)}, расходы ${money(me)}, разница ${money(mi-me)}.`;renderCategories();document.getElementById('offlineState').textContent=navigator.onLine?'Подключение есть. После первой загрузки приложение будет доступно офлайн.':'Сейчас нет интернета. Локальные функции доступны.'}
+function saveBudget(){data.budget=Math.max(0,Number(document.getElementById('budgetLimit').value)||0);persist();toast('Бюджет сохранён')}
+function setTheme(t){data.theme=t;persist();toast('Тема изменена')}
+document.getElementById('themeBtn').onclick=()=>setTheme(data.theme==='dark'?'light':'dark');
+function saveCurrency(){data.currency=document.getElementById('currency').value;persist()}
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-balance-backup-'+dateNow()+'.json';a.click();URL.revokeObjectURL(a.href);toast('Резервная копия подготовлена')}
+function importData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!Array.isArray(d.accounts)||!Array.isArray(d.transactions))throw Error();if(!confirm('Импорт заменит текущие данные. Продолжить?'))return;data={accounts:d.accounts,transactions:d.transactions,goals:d.goals||[],budget:d.budget||0,currency:d.currency||'RUB',theme:d.theme||'dark'};persist();toast('Данные восстановлены')}catch(err){alert('Не удалось прочитать резервную копию.')}e.target.value=''};r.readAsText(f)}
+function resetData(){if(!confirm('Удалить ВСЕ данные MY BALANCE на этом устройстве? Сначала экспортируй резервную копию.'))return;data={accounts:[],transactions:[],goals:[],budget:0,currency:'RUB',theme:'dark'};persist();toast('Данные удалены')}
+window.addEventListener('online',renderAll);window.addEventListener('offline',renderAll);
+renderAll();
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+</script>
+</body></html>
